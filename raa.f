@@ -116,9 +116,9 @@ C             DO 20,I=1,30
      & (BNUM(CN-1:CN-1).NE.CHAR(32)) ) THEN
                     READ(BNUM, '(I3)', ERR=9300) I3VAL
                     IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL',I3VAL
-		    WRITE(12,REC=CNT,ERR=9400) CHAR(I3VAL)
+                    WRITE(12,REC=CNT,ERR=9400) CHAR(I3VAL)
                     CNT = CNT + 1
-		    BNUM=' '
+                    BNUM=' '
                     CN=1
                 ELSE
 C                   PRINT *,'REST OF THE OPTIONS'
