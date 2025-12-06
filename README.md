@@ -3,15 +3,15 @@ pgplot based fortran examples
 ###
 To compile on linux:
 ###
-`make`
+	`make`
 ###
 To compile on MS Windows using Salford/Silverfrost FTN77 and mingw32-make
 ###
-`mingw32-make -f Makefile.ftn77`
+	`mingw32-make -f Makefile.ftn77`
 ###
 To compile on MS Windows using MinGW gfortran and mingw32-make
 ###
-`mingw32-make -f Makefile.mingw`
+	`mingw32-make -f Makefile.mingw`
 ###
 m2b.f
 ###
@@ -19,10 +19,10 @@ The program m2b.f convert an ascii matrix file of dimension WxH with elements of
 same array. The ascii array is organized in rows separated by LF each column element separated by space. The program takes in input
 the input file name from the standard input (or redirecting on stdin the content of a file).
 ###
-`./m2b < in.txt`
+	`./m2b < in.txt`
 ###
-`cat in.txt`
-`arr10x3.asc`
+	`cat in.txt`
+	`arr10x3.asc`
 This will generate a file called arr10x3.raw containing the binary data.
 ###
 m2b2.f
@@ -107,13 +107,13 @@ m2pl.f
 The program m2pl converts a 2D array 8 bits elements matrix in ascii format to pixel list ascii file X,Y,VAL where x is the coordinate of
 the pixel on the a axis (width) and Y is the coordinate of the y axis (height) obtaining a list
 ###
-x1 y1 val11
-x1 y2 val12
- ... ...
-x1 yn val1n
-x2 y1 val21
- ... ...
-xm ym valmn
+	x1 y1 val11
+	x1 y2 val12
+	 ... ...
+	x1 yn val1n
+	x2 y1 val21
+	 ... ...
+	xm ym valmn
 ###
 pl2m.f
 ###

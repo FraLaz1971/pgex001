@@ -29,7 +29,7 @@ C MXJDIM is the maximum dimension on the X axis (height)
 C MAXJDIM is the maximum dimension on the toal 2D array (width*height)
         CHARACTER*5 BNUM
         CHARACTER*16 LINE
-        CHARACTER*(5*MXIDIM) OLINE
+        CHARACTER*(4*MXIDIM) OLINE
 C        INTEGER ROW(MXIDIM)
         INTEGER CN,CNT,SP,X
         LOGICAL DEBUG
@@ -80,7 +80,7 @@ C                  PRINT *,'J5VALM:',J5VALM,'J5VAL:',J5VAL
                   IF((ABS(J5VALM-J5VAL).EQ.1)) THEN
 C                          PRINT *,'WRITING OLINE: ',OLINE
                           IF (DEBUG) PRINT *,'IO: ',IO
-                          WRITE(12,200) OLINE(1:(IO-1)*5)
+                          WRITE(12,200,ERR=9400) OLINE(1:(IO-1)*4)
                          OLINE = ' '
                          IO=1
                    END IF
@@ -90,7 +90,7 @@ C                          PRINT *,'WRITING OLINE: ',OLINE
                   READ(BNUM, '(I3)', ERR=9300) I3VAL
 C                  PRINT *,'BNUM:',BNUM,' I3VAL',I3VAL
                   IF (DEBUG) PRINT *,'READ THE MATRIX VALUE :',I3VAL
-                  WRITE(OLINE((IO-1)*5+1:(IO-1)*5+5),100) I3VAL
+                  WRITE(OLINE((IO-1)*4+1:(IO-1)*4+4),100) I3VAL
 C                  PRINT *,'(',(IO-1)*5+1,':',(IO-1)*5+5,')'
 C                  PRINT *,'OLINE :',OLINE,'IO=',IO
                   IO=IO+1
@@ -122,7 +122,7 @@ C AND ITS COUNTER CN
 C END OF ROWS TO PROCESS: GOTO 30
 30      CONTINUE
         IF (DEBUG) PRINT *,'IO: ',IO
-        WRITE(12,200) OLINE(1:(IO-1)*5)
+        WRITE(12,200,ERR=9400) OLINE(1:(IO-1)*4)
         CLOSE(11)
         CLOSE(12)
         PRINT *,'PROCESSED ',CNT-1,' ELEMENTS'
