@@ -102,3 +102,19 @@ wbas.f
 The program wbas writes a binary array with dimensions WxH and element size 8 bits, filled with casual numbers. The program
 wbas uses the random number generator extension to fortran 77 standard, specific for the salford ftn77 compiler.
 ###
+m2pl.f
+###
+The program m2pl converts a 2D array 8 bits elements matrix in ascii format to pixel list ascii file X,Y,VAL where x is the coordinate of
+the pixel on the a axis (width) and Y is the coordinate of the y axis (height) obtaining a list
+###
+x1 y1 val11
+x1 y2 val12
+ ... ...
+x1 yn val1n
+x2 y1 val21
+ ... ...
+xm ym valmn
+###
+pl2m.f
+###
+pl2m does the inverse of m2pl: takes as input a pixel list ascii file and creates as output a matrix ascii file.
