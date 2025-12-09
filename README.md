@@ -118,3 +118,12 @@ the pixel on the a axis (width) and Y is the coordinate of the y axis (height) o
 pl2m.f
 ###
 pl2m does the inverse of m2pl: takes as input a pixel list ascii file and creates as output a matrix ascii file.
+###
+How to compile a c program linked with pgplot (cpgplot).
+###
+compile to produce the object file
+	gcc -c cpgsimple.c -I/usr/local/pgplot
+###
+then link using fortran compiler/linker
+	f77 cpgsimple.o -o cpgsimple -L/usr/local/pgplot -Wl,-rpath=/usr/local/pgplot -lcpgplot -lpgplot -lX11 -lpng
+(f77 is just a link to gfortran)
