@@ -11,7 +11,8 @@ FDFLAGS=-static -L$(PGPLOT_DIR) -Wl,-rpath=$(PGPLOT_DIR)
 LDFLAGS=$(FDFLAGS)LDFLAGS
 LIBS=-lpgplot -lX11 -lxcb -lXau -lXdmcp -lpng -lz
 SRCS=pgs.f p1_1.f p2.f pgs2096x2338.f pgsc2096x2338.f pgs4080x3072.f pgsc4080x3072.f pgs500x320.f \
-pgsc500x320.f rd.f raa.f waa.f wba.f m2pl.f test01.f test02.f pl2m.f ex1.f simple.f simple2.f
+pgsc500x320.f rd.f raasb.f waa.f wba.f m2pl.f test01.f test02.f pl2m.f ex1.f simple.f simple2.f \
+asubarr.f
 CSRCS=cpgsimple.c cpgarr2d.c
 OBJS = $(SRCS:.f=$(OEXT))
 COBJS = $(CSRCS:.c=$(OEXT))LDFLAGS
