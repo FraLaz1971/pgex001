@@ -8,8 +8,8 @@ FFLAGS=/ANSI
 FDFLAGS=
 LIBS=$(PGPLOT_DIR)\pgplot.lib
 SRCS=pgs.f p1_1.f p2.f rd.f pgs2096x2338.f pgsc2096x2338.f m2b.f \
-pgs4080x3072.f pgs500x320.f pgsc4080x3072.f pgsc500x320.f testbyte.f \
-raa.f waas.f wbas.f waar.f wbar.f pl2m.f m2pl.f
+pgs4080x3072.f pgs500x320.f pgsc4080x3072.f pgsc500x320.f \
+waas.f wbas.f waar.f wbar.f pl2m.f m2pl.f asubarr.f
 OBJS = $(SRCS:.f=$(OEXT))
 TARGETS = $(OBJS:$(OEXT)=$(EEXT))
 .PHONY: all clean
