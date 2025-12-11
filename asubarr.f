@@ -23,7 +23,7 @@ C AS INPUT
 C AND SAVE TO ASCII MATRIX FILE
       SUBROUTINE M2SM(IFNAM,FX,LX,FY,LY)
         IMPLICIT NONE
-	    INTEGER FY,LY,FX,LX,X,Y
+        INTEGER FY,LY,FX,LX,X,Y
         CHARACTER*80 IFNAM,OFNAM
         CHARACTER*1 RBYTE
         CHARACTER*10 SUF1
@@ -60,8 +60,8 @@ C Create output file name, same basename, pre extension,.asc extension
         TW=20000
         TH=5000
 C POSITION OF THE OUTPUT SUBARR IS
-C X=MOD(CNT,WIDTH)
-C Y=CNT/WIDTH+1
+C X=MOD(CNT,TW)
+C Y=CNT/TW+1
         DEBUG=.TRUE.
         IF (DEBUG) PRINT *,'FX: ',FX,' LX: ',LX,' FY: ',FY,' LY: ',LY
         DO 10,J=1,MXJDIM
@@ -83,8 +83,9 @@ C Y=CNT/WIDTH+1
                     X=FX+MOD(CNT,TW)
                     READ(BNUM, '(I3)', ERR=9300) I3VAL
                     IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL',I3VAL
-                    IF (DEBUG) PRINT 200,(X-1)*4+1,(X-1)*4+4,(X-1)+1
-                     IF(X.LE.WIDTH) WRITE(OLINE((X-1)*4+1:(X-1)*4+4),
+                    IF (DEBUG) PRINT 200,MOD((X-1)*4,WIDTH)+1,
+     &MOD((X-1)*4,WIDTH)+4,MOD((X-1),WIDTH)+1
+                    IF(X.LE.WIDTH) WRITE(OLINE((X-1)*4+1:(X-1)*4+4),
      & '(I3,1X)',ERR=9400) I3VAL
                     CNT = CNT + 1
                     BNUM=' '
@@ -117,7 +118,7 @@ C END OF ROWS TO PROCESS: GOTO 30
 
         GOTO 9999
 100     FORMAT(A)
-200     FORMAT('(X-1)*4+1',I4,'(X-1)*4+4',I4,'Y=',I4)
+200     FORMAT('(X-1)*4+1 ',I5,' (X-1)*4+4 ',I5,' X=',I4)
 9000    PRINT *,'ERROR IN OPENING INPUT FILE ',IFNAM
         GOTO 9999
 9100    PRINT *,'ERROR IN READING THE ROW',J

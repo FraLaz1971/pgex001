@@ -27,7 +27,7 @@ C        INTEGER ROW(MXIDIM)
         CHARACTER*(4*MXIDIM) LINE
         CHARACTER*5 BNUM
         INTEGER CN,CNT,SP
-        LOGICAL DEBUG, F
+        LOGICAL DEBUG
         INTEGER I,J,POSI
         DEBUG = .FALSE.
         POSI=INDEX(IFNAM,'.')
@@ -35,7 +35,6 @@ C        INTEGER ROW(MXIDIM)
         OPEN(11,FILE=IFNAM,ERR=9000)
         OPEN(12,FILE=OFNAM,FORM='UNFORMATTED',ERR=9500
      &, ACCESS='DIRECT',RECL=1)
-        F=.FALSE.
         BNUM=' '
         CN=1
         CNT=1
@@ -67,11 +66,6 @@ C        INTEGER ROW(MXIDIM)
                 END IF
 20          CONTINUE
 15          IF (DEBUG)  PRINT *,'PROCESSED LINE',J
-        IF (.NOT.F) THEN
-          TW=CNT
-          IF (DEBUG) PRINT *,'TOTAL WIDTH:',TW
-          F=.TRUE.
-        END IF
 10      CONTINUE
 C END OF ROWS TO PROCESS: GOTO 30
 30      CONTINUE
