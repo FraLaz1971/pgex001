@@ -62,7 +62,6 @@ C Create output file name, same basename, pre extension,.asc extension
 C POSITION OF THE OUTPUT SUBARR IS
 C X=MOD(CNT,TW)
 C Y=CNT/TW+1
-        DEBUG=.TRUE.
         IF (DEBUG) PRINT *,'FX: ',FX,' LX: ',LX,' FY: ',FY,' LY: ',LY
         DO 10,J=1,MXJDIM
             SP=0
@@ -72,44 +71,50 @@ C Y=CNT/TW+1
             DO 20,I=1,LEN(LINE)
                 RBYTE = LINE(I:I)
                 READ(RBYTE, '(I1)') IVAL
-                DEBUG=.FALSE.
                 IF(DEBUG)PRINT *,'I:',I,'RBYTE: ',RBYTE,' IVAL ',IVAL
-                DEBUG=.TRUE.
                 IF (RBYTE.NE.CHAR(32)) THEN
                   BNUM(CN:CN) = RBYTE
                   CN = CN + 1
                 ELSE IF ((CN.GT.1).AND.(RBYTE.EQ.CHAR(32)).AND.
      & (BNUM(CN-1:CN-1).NE.CHAR(32)) ) THEN
-                    X=FX+MOD(CNT,TW)
+                    X=MOD(CNT,TW)+1
                     READ(BNUM, '(I3)', ERR=9300) I3VAL
-                    IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL',I3VAL
-                    IF (DEBUG) PRINT 200,MOD((X-1)*4,WIDTH)+1,
-     &MOD((X-1)*4,WIDTH)+4,MOD((X-1),WIDTH)+1
-                    IF(X.LE.WIDTH) WRITE(OLINE((X-1)*4+1:(X-1)*4+4),
-     & '(I3,1X)',ERR=9400) I3VAL
+                    IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL'
+     &,I3VAL,' X',X,' Y',J
+                    IF (DEBUG) PRINT *,'WIDTH: ',WIDTH
+                    IF((X.GE.FX).AND.(X.LE.(FX+WIDTH-1))) THEN
+                    PRINT 200,MOD((X-FX)*4,WIDTH*4)+1,
+     &MOD((X-FX)*4,WIDTH*4)+4,MOD((X-FX),WIDTH*4)+1,J
+                    PRINT *,'writing ',I3VAL
+                      WRITE(OLINE(MOD((X-FX)*4,WIDTH*4)+1:
+     &MOD((X-FX)*4,WIDTH*4)+4),'(I3,1X)',ERR=9400) I3VAL
+                    ELSE
+                      CONTINUE
+                    END IF
                     CNT = CNT + 1
                     BNUM=' '
                     CN=1
                     SP=0
                 ELSE
                     IF (DEBUG) PRINT *,'REST OF THE OPTIONS'
-                    IF (SP.GT.4) GOTO 15
+                    IF (SP.GT.4) THEN
+                    IF (.NOT.F) THEN
+                        TW=CNT
+                        IF (DEBUG) PRINT *,'TOTAL WIDTH:',TW
+                        F=.TRUE.
+                    END IF
+                    GOTO 15
+                    END IF
                     SP=SP+1
                 END IF
 20          CONTINUE
-15            PRINT *,'PROCESSED LINE',J
+15            IF (DEBUG) PRINT *,'PROCESSED LINE',J
               WRITE(12,'(A)',ERR=9400) OLINE(1:WIDTH*4)
              END IF
-        IF (.NOT.F) THEN
-          TW=CNT
-          IF (DEBUG) PRINT *,'TOTAL WIDTH:',TW
-          F=.TRUE.
-        END IF
 10      CONTINUE
 C END OF ROWS TO PROCESS: GOTO 30
 30      CONTINUE
         TH=J-1
-        DEBUG=.FALSE.
         CLOSE(11)
         CLOSE(112)
         PRINT *,'PROCESSED ',CNT,' BYTES/ELEMENTS'
@@ -118,7 +123,7 @@ C END OF ROWS TO PROCESS: GOTO 30
 
         GOTO 9999
 100     FORMAT(A)
-200     FORMAT('(X-1)*4+1 ',I5,' (X-1)*4+4 ',I5,' X=',I4)
+200     FORMAT('(X-1)*4+1 ',I5,' (X-1)*4+4 ',I5,' X=',I4,' Y=',I4)
 9000    PRINT *,'ERROR IN OPENING INPUT FILE ',IFNAM
         GOTO 9999
 9100    PRINT *,'ERROR IN READING THE ROW',J
