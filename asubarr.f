@@ -71,23 +71,26 @@ C Y=CNT/TW+1
             DO 20,I=1,LEN(LINE)
                 RBYTE = LINE(I:I)
                 READ(RBYTE, '(I1)') IVAL
-                IF(DEBUG)PRINT *,'I:',I,'RBYTE: ',RBYTE,' IVAL ',IVAL
+		DEBUG=.FALSE.
+                IF(DEBUG)PRINT *,'I:',I,' RBYTE: ',RBYTE,' IVAL ',IVAL
                 IF (RBYTE.NE.CHAR(32)) THEN
                   BNUM(CN:CN) = RBYTE
                   CN = CN + 1
                 ELSE IF ((CN.GT.1).AND.(RBYTE.EQ.CHAR(32)).AND.
      & (BNUM(CN-1:CN-1).NE.CHAR(32)) ) THEN
+                    DEBUG=.TRUE.
                     X=MOD(CNT,TW)+1
                     READ(BNUM, '(I3)', ERR=9300) I3VAL
                     IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL'
      &,I3VAL,' X',X,' Y',J
                     IF (DEBUG) PRINT *,'WIDTH: ',WIDTH
                     IF((X.GE.FX).AND.(X.LE.(FX+WIDTH-1))) THEN
-                    PRINT 200,MOD((X-FX)*4,WIDTH*4)+1,
+                    IF (DEBUG) PRINT 200,MOD((X-FX)*4,WIDTH*4)+1,
      &MOD((X-FX)*4,WIDTH*4)+4,MOD((X-FX),WIDTH*4)+1,J
-                    PRINT *,'writing ',I3VAL
+                    IF (DEBUG) PRINT *,'writing ',I3VAL
                       WRITE(OLINE(MOD((X-FX)*4,WIDTH*4)+1:
      &MOD((X-FX)*4,WIDTH*4)+4),'(I3,1X)',ERR=9400) I3VAL
+                    DEBUG=.FALSE.
                     ELSE
                       CONTINUE
                     END IF
@@ -118,8 +121,8 @@ C END OF ROWS TO PROCESS: GOTO 30
         CLOSE(11)
         CLOSE(12)
         PRINT *,'PROCESSED ',CNT,' BYTES/ELEMENTS'
-        PRINT *,'TOTAL WIDTH',TW,'TOTAL HEIGHT',TH
-        PRINT *,'SUBARRAY WIDTH',WIDTH,'SUBARRAY HEIGHT',HEIGHT
+        PRINT *,'TOTAL WIDTH',TW,' TOTAL HEIGHT',TH
+        PRINT *,'SUBARRAY WIDTH',WIDTH,' SUBARRAY HEIGHT',HEIGHT
 
         GOTO 9999
 100     FORMAT(A)
