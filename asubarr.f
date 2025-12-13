@@ -1,7 +1,7 @@
 C maximum dimension of the array is 5000x5000
       PROGRAM TB
 	    IMPLICIT NONE
-        CHARACTER*80 IFNAM
+        CHARACTER*128 IFNAM
 	    INTEGER FY,LY,FX,LX
 	    PRINT *,'ENTER INPUT FILENAME'
 	    READ *,IFNAM
@@ -24,12 +24,12 @@ C AND SAVE TO ASCII MATRIX FILE
       SUBROUTINE M2SM(IFNAM,FX,LX,FY,LY)
         IMPLICIT NONE
         INTEGER FY,LY,FX,LX,X,Y
-        CHARACTER*80 IFNAM,OFNAM
+        CHARACTER*128 IFNAM,OFNAM
         CHARACTER*1 RBYTE
         CHARACTER*10 SUF1
         INTEGER MXIDIM,MXJDIM,IVAL,I3VAL,POSI
 C Maximum expected dimension
-        PARAMETER(MXIDIM=5000,MXJDIM=5000)
+        PARAMETER(MXIDIM=25000,MXJDIM=25000)
 C MXIDIM is the maximum dimension on the Y axis (width)
 C MXJDIM is the maximum dimension on the X axis (height)
         CHARACTER*(4*MXIDIM) LINE
@@ -45,7 +45,7 @@ C TH IS THE TOTAL HEIGHT OF THE INPUT MATRIX
         HEIGHT=LY-FY+1
         DEBUG = .FALSE.
 C Create output file name, same basename, pre extension,.asc extension
-        WRITE(SUF1,'(BZ,I4,''x'',I4,''_'')')WIDTH,HEIGHT
+        WRITE(SUF1,'(BZ,''_'',I4,''x'',I4)')WIDTH,HEIGHT
         DO 40,I=1,LEN(SUF1)
           IF (SUF1(I:I).EQ.' ')SUF1(I:I)='_'
 40      CONTINUE
@@ -71,14 +71,12 @@ C Y=CNT/TW+1
             DO 20,I=1,LEN(LINE)
                 RBYTE = LINE(I:I)
                 READ(RBYTE, '(I1)') IVAL
-		DEBUG=.FALSE.
                 IF(DEBUG)PRINT *,'I:',I,' RBYTE: ',RBYTE,' IVAL ',IVAL
                 IF (RBYTE.NE.CHAR(32)) THEN
                   BNUM(CN:CN) = RBYTE
                   CN = CN + 1
                 ELSE IF ((CN.GT.1).AND.(RBYTE.EQ.CHAR(32)).AND.
      & (BNUM(CN-1:CN-1).NE.CHAR(32)) ) THEN
-                    DEBUG=.TRUE.
                     X=MOD(CNT,TW)+1
                     READ(BNUM, '(I3)', ERR=9300) I3VAL
                     IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL'
@@ -90,7 +88,6 @@ C Y=CNT/TW+1
                     IF (DEBUG) PRINT *,'writing ',I3VAL
                       WRITE(OLINE(MOD((X-FX)*4,WIDTH*4)+1:
      &MOD((X-FX)*4,WIDTH*4)+4),'(I3,1X)',ERR=9400) I3VAL
-                    DEBUG=.FALSE.
                     ELSE
                       CONTINUE
                     END IF

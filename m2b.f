@@ -20,7 +20,7 @@ C WITH WIDTH COLUMNS AND HEIGHT ROWS
         CHARACTER*1 RBYTE
         INTEGER MXIDIM,MXJDIM,IVAL,I3VAL
 C Maximum expected dimension
-      PARAMETER(MXIDIM=5000,MXJDIM=5000)
+      PARAMETER(MXIDIM=23040,MXJDIM=11520)
 C MXIDIM is the maximum dimension on the Y axis (width)
 C MXJDIM is the maximum dimension on the X axis (height)
 C        INTEGER ROW(MXIDIM)
