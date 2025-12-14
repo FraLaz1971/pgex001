@@ -1,4 +1,4 @@
-C READS AN ASCII MATRIX 2D ARRAY (8 BITS ELEMENTS)
+C READS AN ASCII MATRIX 2D ARRAY (16 BITS ELEMENTS, SIGNED)
 C AND WRITES A PIXEL LIST (X,Y,VAL)
 C COLUMN ELEMENTS ARE SEPARATED BY SPACES (ascii decimal 32)
 C ROWS ARE SEPARATED BY LF (ascii decimal 10 )
@@ -18,15 +18,16 @@ C ROWS ARE SEPARATED BY LF (ascii decimal 10 )
       SUBROUTINE M2PL(IFNAM)
         IMPLICIT NONE
         CHARACTER*80 IFNAM,OFNAM
-        CHARACTER*1 RBYTE
-        INTEGER MXIDIM,MXJDIM,IVAL,I3VAL
+        INTEGER MXIDIM,MXJDIM,IVAL
+        INTEGER*2 I16VAL
 C Maximum expected dimension
       PARAMETER(MXIDIM=25000,MXJDIM=25000)
 C MXIDIM is the maximum dimension on the Y axis (width)
 C MXJDIM is the maximum dimension on the X axis (height)
 C        INTEGER ROW(MXIDIM)
-        CHARACTER*(4*MXIDIM) LINE
+        CHARACTER*(7*MXIDIM) LINE
         CHARACTER*5 BNUM
+        CHARACTER*1 RBYTE
         INTEGER CN,CNT,SP,X
         LOGICAL DEBUG
         INTEGER I,J,POSI
@@ -53,9 +54,9 @@ C                IF (DEBUG) PRINT *,'I:',I,'RBYTE: ',RBYTE,' IVAL ',IVAL
                   CN = CN + 1
                 ELSE IF ((CN.GT.1).AND. (RBYTE.EQ.CHAR(32)).AND.
      & (BNUM(CN-1:CN-1).NE.CHAR(32)) ) THEN
-                    READ(BNUM, '(I3)', ERR=9300) I3VAL
+                    READ(BNUM, '(I7)', ERR=9300) I16VAL
 C                    IF (DEBUG) PRINT *,'BNUM:',BNUM,' I3VAL',I3VAL
-                    WRITE(12,200,ERR=9400) X,J,I3VAL
+                    WRITE(12,200,ERR=9400) X,J,I16VAL
                     CNT = CNT + 1
                     X = X + 1
                     BNUM=' '
@@ -78,7 +79,7 @@ C END OF ROWS TO PROCESS: GOTO 30
         CLOSE(12)
         PRINT *,'WROTE ',CNT-1,' ROWS/ELEMENTS'
 100     FORMAT(A)
-200     FORMAT(I5,1X,I5,1X,I3)
+200     FORMAT(I5,1X,I5,1X,I7)
         GOTO 9999
 9000    PRINT *,'ERROR IN OPENING INPUT FILE ',IFNAM
         GOTO 9999

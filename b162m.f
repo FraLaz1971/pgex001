@@ -1,4 +1,4 @@
-C PIXEL DIMENSION FIXED TO 8 BITS
+C PIXEL DIMENSION FIXED TO 16 BITS
       PROGRAM TB
 	    IMPLICIT NONE
         CHARACTER*128 IFNAM
@@ -31,15 +31,15 @@ C WITH WIDTH COLUMNS AND HEIGHT ROWS
         IMPLICIT NONE
         CHARACTER*128 IFNAM,OFNAM
         INTEGER WIDTH, HEIGHT
-        CHARACTER*1 RBYTE
-        INTEGER MXIDIM,MXJDIM,IVAL,I3VAL
+        INTEGER MXIDIM,MXJDIM
+        INTEGER*2 I16VAL
 C Maximum expected dimension
       PARAMETER(MXIDIM=25000,MXJDIM=25000)
 C MXIDIM is the maximum dimension on the Y axis (width)
 C MXJDIM is the maximum dimension on the X axis (height)
 C        INTEGER ROW(MXIDIM)
-        CHARACTER*(MXIDIM*4) OLINE
-        CHARACTER*5 BNUM
+        CHARACTER*(WIDTH*8) OLINE
+        CHARACTER*6 BNUM
         INTEGER CN,CNT,SP
         LOGICAL DEBUG
         INTEGER I,J,POSI
@@ -47,26 +47,29 @@ C        INTEGER ROW(MXIDIM)
         POSI=INDEX(IFNAM,'.')
         OFNAM=IFNAM(1:POSI)//'asc'
         OPEN(11,FILE=IFNAM,FORM='UNFORMATTED',ERR=9500
-     &, ACCESS='DIRECT',RECL=1)
+     &, ACCESS='DIRECT',RECL=2)
         OPEN(12,FILE=OFNAM,ERR=9000)
         CNT=1
         DO 10,J=1,HEIGHT
             DO 20,I=1,WIDTH
-                READ(11,REC=CNT,ERR=9100) RBYTE
-                IF (DEBUG) PRINT *,' IVAL ',ICHAR(RBYTE)
-                WRITE(OLINE((I-1)*4+1:(I-1)*4+4),'(I3,1X)',ERR=9400)
-     &ICHAR(RBYTE)
+                READ(11,REC=CNT,ERR=9100) I16VAL
+                IF (DEBUG) PRINT *,' I16VAL ',I16VAL,' I ',I
+                WRITE(OLINE((I-1)*7+1:(I-1)*7+7),'(I6,1X)',ERR=9400)
+     &I16VAL
                 CNT = CNT + 1
 20          CONTINUE
-            WRITE(OLINE((I-1)*4+5:),'(A2)',ERR=9400) '  '
-            WRITE(12,'(A)',ERR=9400) OLINE
+            WRITE(OLINE((I-1)*7+8:),'(A2)',ERR=9400) '  '
+            DO 50,I=1,LEN(OLINE)
+              IF ((OLINE(I:I).LT.CHAR(32))) OLINE(I:I)=CHAR(32)
+50          CONTINUE
+            WRITE(12,'(A)',ERR=9400) OLINE(1:WIDTH*7+2)
 15          IF (DEBUG)  PRINT *,'PROCESSED LINE',J
 10      CONTINUE
 C END OF ROWS TO PROCESS: GOTO 30
 30      CONTINUE
         CLOSE(11)
         CLOSE(12)
-        PRINT *,'WROTE ',CNT-1,' BYTES/ELEMENTS'
+        PRINT *,'WROTE ',CNT-1,' WORDS/ELEMENTS'
 100     FORMAT(A)
         GOTO 9999
 9000    PRINT *,'ERROR IN OPENING OUTPUT FILE ',OFNAM
